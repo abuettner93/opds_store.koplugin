@@ -7,7 +7,6 @@ local Geom = require("ui/geometry")
 local GestureRange = require("ui/gesturerange")
 local HorizontalGroup = require("ui/widget/horizontalgroup")
 local HorizontalSpan = require("ui/widget/horizontalspan")
-local ImageWidget = require("ui/widget/imagewidget")
 local InputContainer = require("ui/widget/container/inputcontainer")
 local Menu = require("ui/widget/menu")
 local TextBoxWidget = require("ui/widget/textboxwidget")
@@ -107,30 +106,8 @@ function OPDSGridCell:init()
         },
     }
 
-    -- Create cover widget
-    local inner_cover_widget
-    if self.entry.cover_bb then
-        inner_cover_widget = ImageWidget:new {
-            image = self.entry.cover_bb,
-            width = self.cover_width,
-            height = self.cover_height,
-            alpha = true,
-        }
-    elseif self.entry.cover_url and self.entry.lazy_load_cover then
-        inner_cover_widget = UIUtils.createPlaceholderCover(self.cover_width, self.cover_height, "loading")
-    elseif self.entry.cover_url and self.entry.cover_failed then
-        inner_cover_widget = UIUtils.createPlaceholderCover(self.cover_width, self.cover_height, "error")
-    else
-        inner_cover_widget = UIUtils.createPlaceholderCover(self.cover_width, self.cover_height, "no_cover")
-    end
-
-    local cover_widget = CenterContainer:new {
-        dimen = Geom:new {
-            w = self.cover_width,
-            h = self.cover_height,
-        },
-        inner_cover_widget
-    }
+    -- Create cover widget (shared helper also used by home screen shelf rows)
+    local cover_widget = UIUtils.buildCoverWidget(self.entry, self.cover_width, self.cover_height)
 
     -- Parse title and author
     local title, author = UIUtils.parseTitleAuthor(self.entry)

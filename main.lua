@@ -24,8 +24,8 @@ local SettingsDialogs = require("ui.dialogs.settings_dialogs")
 local StateManager = require("core.state_manager")
 
 local OPDS = WidgetContainer:extend {
-    name = "opdsplus",
-    opds_settings_file = DataStorage:getSettingsDir() .. "/opdsplus.lua",
+    name = "opds_store",
+    opds_settings_file = DataStorage:getSettingsDir() .. "/opds_store.lua",
     settings = nil,
     servers = nil,
     downloads = nil,
@@ -172,16 +172,19 @@ function OPDS:getAvailableFonts()
 end
 
 function OPDS:onDispatcherRegisterActions()
+    -- Action IDs (first argument) are kept unchanged across the rename: they're the keys
+    -- KOReader persists in a user's gesture bindings, and changing them would silently
+    -- unbind any gesture someone already assigned under the old OPDS Plus name.
     Dispatcher:registerAction("opdsplus_show_catalog",
-        { category = "none", event = "ShowOPDSPlusCatalog", title = _("OPDS Plus Catalog"), filemanager = true, }
+        { category = "none", event = "ShowOPDSStoreCatalog", title = _("OPDS Store Catalog"), filemanager = true, }
     )
 
     Dispatcher:registerAction("opdsplus_sync_all",
-        { category = "none", event = "StartOPDSSyncAllCatalogs", title = _("OPDS Plus: Sync all catalogs"), filemanager = true, }
+        { category = "none", event = "StartOPDSSyncAllCatalogs", title = _("OPDS Store: Sync all catalogs"), filemanager = true, }
     )
 
     Dispatcher:registerAction("opdsplus_force_sync_all",
-        { category = "none", event = "StartOPDSForceSyncAllCatalogs", title = _("OPDS Plus: Force sync all catalogs"), filemanager = true, }
+        { category = "none", event = "StartOPDSForceSyncAllCatalogs", title = _("OPDS Store: Force sync all catalogs"), filemanager = true, }
     )
 end
 
@@ -191,7 +194,7 @@ function OPDS:_createBrowserInstance()
         downloads = self.downloads,
         settings = self.settings,
         pending_syncs = self.pending_syncs,
-        title = _("OPDS Plus Catalog"),
+        title = _("OPDS Store Catalog"),
         is_popout = false,
         is_borderless = true,
         title_bar_fm_style = true,
@@ -237,8 +240,8 @@ end
 
 function OPDS:addToMainMenu(menu_items)
     if not self.ui.document then -- FileManager menu only
-        menu_items.opdsplus = {
-            text = _("OPDS Plus Catalog"),
+        menu_items.opds_store = {
+            text = _("OPDS Store Catalog"),
             sub_item_table = SettingsMenu.create(self)
         }
     end
@@ -288,11 +291,15 @@ function OPDS:showCoverCacheTTLDialog()
     SettingsDialogs.showCoverCacheTTLDialog(self)
 end
 
+function OPDS:clearShelfCache()
+    SettingsDialogs.clearShelfCache()
+end
+
 function OPDS:clearCoverCache()
     SettingsDialogs.clearCoverCache()
 end
 
-function OPDS:onShowOPDSPlusCatalog()
+function OPDS:onShowOPDSStoreCatalog()
     self.opds_browser = self:_createBrowserInstance()
     UIManager:show(self.opds_browser)
 end

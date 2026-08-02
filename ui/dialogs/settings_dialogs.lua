@@ -1,4 +1,4 @@
--- Settings dialog builders for OPDS Plus
+-- Settings dialog builders for OPDS Store
 -- Extracted from main.lua for better organization and maintainability
 
 local ButtonDialogBuilder = require("utils.button_dialog_builder")
@@ -7,6 +7,7 @@ local SpinWidget = require("ui/widget/spinwidget")
 local UIManager = require("ui/uimanager")
 local Constants = require("models.constants")
 local ImageLoader = require("services.image_loader")
+local ShelfCache = require("services.shelf_cache")
 local _ = require("gettext")
 local T = require("ffi/util").template
 
@@ -459,6 +460,15 @@ function SettingsDialogs.clearCoverCache()
 	ImageLoader.clearCache()
 	UIManager:show(InfoMessage:new {
 		text = _("Cover cache cleared."),
+		timeout = 2,
+	})
+end
+
+--- Clear the home screen shelf cache
+function SettingsDialogs.clearShelfCache()
+	ShelfCache.clear()
+	UIManager:show(InfoMessage:new {
+		text = _("Home screen shelf cache cleared."),
 		timeout = 2,
 	})
 end

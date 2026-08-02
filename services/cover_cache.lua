@@ -4,7 +4,7 @@ local bit = require("bit")
 
 local CoverCache = {}
 
-local CACHE_DIR = DataStorage:getDataDir() .. "/cache/opds_plus/covers"
+local CACHE_DIR = DataStorage:getDataDir() .. "/cache/opds_store/covers"
 
 local function ensureDir(path)
 	if lfs.attributes(path, "mode") == "directory" then

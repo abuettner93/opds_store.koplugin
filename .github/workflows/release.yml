@@ -16,11 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          path: 'opds_plus.koplugin'
+          path: 'opds_store.koplugin'
 
       - name: Create zip archive
         run: |
-          zip -r opds_plus.koplugin.zip opds_plus.koplugin \
+          zip -r opds_store.koplugin.zip opds_store.koplugin \
             -x '**/.git/*' \
             -x '**/.github/*' \
             -x '**/*.zip'
@@ -28,8 +28,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: opds_plus.koplugin
-          path: opds_plus.koplugin.zip
+          name: opds_store.koplugin
+          path: opds_store.koplugin.zip
 
   publish-release:
     needs: build-release
@@ -38,13 +38,13 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v8
         with:
-          name: opds_plus.koplugin
+          name: opds_store.koplugin
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: opds_plus.koplugin.zip
+          files: opds_store.koplugin.zip
           draft: false
           prerelease: false
         env:

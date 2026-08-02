@@ -1,10 +1,10 @@
-# Contributing to OPDS Plus
+# Contributing to OPDS Store
 
-First off, thank you for considering contributing to OPDS Plus! It's people like you that make OPDS Plus such a great tool for the KOReader community.
+First off, thank you for considering contributing to OPDS Store! It's people like you that make OPDS Store such a great tool for the KOReader community.
 
 ## Table of Contents
 
-- [Contributing to OPDS Plus](#contributing-to-opds-plus)
+- [Contributing to OPDS Store](#contributing-to-opds-store)
 	- [Table of Contents](#table-of-contents)
 	- [Code of Conduct](#code-of-conduct)
 	- [How Can I Contribute?](#how-can-i-contribute)
@@ -47,7 +47,7 @@ Before creating bug reports, please check the existing issues to avoid duplicate
 - **Expected behavior** and what actually happened
 - **Screenshots** if applicable
 - **KOReader version** and device information
-- **OPDS Plus version** (found in Settings → About)
+- **OPDS Store version** (found in Settings → About)
 - **OPDS catalog** you were browsing when the issue occurred
 - **Log files** if available (enable Debug Mode in Developer settings)
 
@@ -57,7 +57,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 
 - **Use a clear, descriptive title**
 - **Provide a detailed description** of the suggested enhancement
-- **Explain why this enhancement would be useful** to most OPDS Plus users
+- **Explain why this enhancement would be useful** to most OPDS Store users
 - **List any similar features** in other applications if applicable
 - **Include mockups or examples** if you have them
 
@@ -83,7 +83,7 @@ Unsure where to begin? Look for issues labeled:
 1. Ensure your code follows the [Lua style guidelines](#lua-code-style)
 2. Update the README.md with details of changes if applicable
 3. Update the CHANGELOG.md following the existing format
-4. Increment version numbers in `opds_plus_version.lua` and `_meta.lua` if appropriate
+4. Increment version numbers in `opds_store_version.lua` and `_meta.lua` if appropriate
 5. Your PR will be reviewed by maintainers
 6. Address any requested changes
 7. Once approved, your PR will be merged
@@ -190,8 +190,8 @@ Closes #42
 
 1. **Clone your fork:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/opds_plus.koplugin.git
-   cd opds_plus.koplugin
+   git clone https://github.com/YOUR_USERNAME/opds_store.koplugin.git
+   cd opds_store.koplugin
    ```
 
 2. **Create a development branch:**
@@ -202,14 +202,14 @@ Closes #42
 3. **Link to KOReader plugins directory:**
    ```bash
    # Linux example
-   ln -s $(pwd) ~/.config/koreader/plugins/opds_plus.koplugin
+   ln -s $(pwd) ~/.config/koreader/plugins/opds_store.koplugin
 
    # Or copy the directory
-   cp -r . ~/.config/koreader/plugins/opds_plus.koplugin
+   cp -r . ~/.config/koreader/plugins/opds_store.koplugin
    ```
 
 4. **Enable Debug Mode:**
-   - In KOReader: OPDS Plus → Settings → Developer → Debug Mode
+   - In KOReader: OPDS Store → Settings → Developer → Debug Mode
    - This enables detailed logging for development
 
 5. **Make your changes** and test in KOReader
@@ -221,7 +221,7 @@ Closes #42
 ### File Structure Understanding
 
 ```
-opds_plus.koplugin/
+opds_store.koplugin/
 ├── _meta.lua                 # Plugin metadata (name, version, description)
 ├── main.lua                  # Plugin initialization, settings UI, main entry point
 ├── opdsbrowserplus.lua       # Catalog browser logic, OPDS feed handling
@@ -233,7 +233,7 @@ opds_plus.koplugin/
 ├── image_loader.lua          # Cover image downloading and caching
 ├── url_content.lua           # HTTP network operations
 ├── debug_helper.lua          # Debug logging utilities
-└── opds_plus_version.lua     # Version number (single source of truth)
+└── opds_store_version.lua    # Version number (single source of truth)
 ```
 
 ### Key Components
@@ -303,4 +303,4 @@ Contributors will be recognized in:
 
 ---
 
-Thank you for contributing to OPDS Plus! 📚✨
+Thank you for contributing to OPDS Store! 📚✨

@@ -1,4 +1,4 @@
--- Debug utility for OPDS Plus
+-- Debug utility for OPDS Store
 -- Provides conditional debug logging based on StateManager settings
 
 local logger = require("logger")

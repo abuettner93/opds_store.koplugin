@@ -11,7 +11,7 @@ Thumbs.db
 *.log
 
 # Packaging artifacts
-opds_plus.koplugin.zip
+opds_store.koplugin.zip
 /dist/
 /tmp/
 

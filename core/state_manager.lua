@@ -1,4 +1,4 @@
--- State Manager for OPDS Plus
+-- State Manager for OPDS Store
 -- Centralizes state change tracking and persistence notifications
 -- Reduces direct _manager.updated coupling throughout the codebase
 

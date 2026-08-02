@@ -219,6 +219,14 @@ function NavigationHandler.updateCatalog(item_url, browser, paths_updated)
 		browser:_debugLog("updateCatalog called for:", item_url)
 	end
 
+	-- Root entry = this call resolves to depth 1 (server root), whether that's a fresh
+	-- selection (paths not yet pushed) or returning back to it (paths already at depth 1,
+	-- e.g. OPDSBrowser:onReturn backing out of a shelf's "See all" view). This is the only
+	-- point that ever routes to the home screen; every deeper level, facet, search result,
+	-- and pagination call is untouched.
+	local resulting_depth = paths_updated and #browser.paths or (#browser.paths + 1)
+	local is_root_entry = resulting_depth == 1
+
 	local context = BrowserContext.fromBrowser(browser)
 	local debug_callback = function(...) if browser._debugLog then browser:_debugLog(...) end end
 
@@ -251,7 +259,24 @@ function NavigationHandler.updateCatalog(item_url, browser, paths_updated)
 				title = browser.catalog_title,
 			})
 		end
+
+		browser.is_home_screen = false
+		local StateManager = require("core.state_manager")
+		if is_root_entry and StateManager.getInstance():getSetting("home_screen_enabled", true) then
+			local HomeBuilder = require("core.home_builder")
+			browser.home_data = HomeBuilder.build(browser, menu_table)
+			browser.is_home_screen = true
+		end
+
 		browser:switchItemTable(browser.catalog_title, menu_table)
+
+		if browser.is_home_screen then
+			local HomeBuilder = require("core.home_builder")
+			local UIManager = require("ui/uimanager")
+			UIManager:scheduleIn(0.3, function()
+				HomeBuilder.resolveRemaining(browser)
+			end)
+		end
 
 		-- Set appropriate title bar icon based on content
 		if browser.facet_groups or browser.search_url then

@@ -1,19 +1,19 @@
-![OPDS Plus Banner](.github/assets/hero_banner.png)
+![OPDS Store Banner](.github/assets/hero_banner.png)
 
 <div align="center">
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/greywolf1499/opds_plus.koplugin?style=for-the-badge&color=orange)
-![GitHub all releases](https://img.shields.io/github/downloads/greywolf1499/opds_plus.koplugin/total?style=for-the-badge&color=yellow)
-![GitHub](https://img.shields.io/github/license/greywolf1499/opds_plus.koplugin?style=for-the-badge&color=blue)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/abuettner93/opds_store.koplugin?style=for-the-badge&color=orange)
+![GitHub all releases](https://img.shields.io/github/downloads/abuettner93/opds_store.koplugin/total?style=for-the-badge&color=yellow)
+![GitHub](https://img.shields.io/github/license/abuettner93/opds_store.koplugin?style=for-the-badge&color=blue)
 ![Platform](https://img.shields.io/badge/Platform-KOReader-success?style=for-the-badge&logo=koreader)
 
 </div>
 
-# OPDS Plus - Enhanced OPDS Browser for KOReader
+# OPDS Store - Enhanced OPDS Browser for KOReader
 
 **Version:** 1.2.0
 
-**OPDS Plus** is a feature-rich enhancement of KOReader's built-in OPDS catalog browser, providing visual book cover displays, multiple viewing modes, and extensive customization options for browsing online book catalogs.
+**OPDS Store** is a feature-rich enhancement of KOReader's built-in OPDS catalog browser, providing visual book cover displays, multiple viewing modes, and extensive customization options for browsing online book catalogs. It's a fork of [OPDS Plus](https://github.com/greywolf1499/opds_plus.koplugin), building toward a more browsable, store-like experience on top of the same OPDS foundation.
 
 ## ✨ Features
 
@@ -76,8 +76,8 @@
 ### Method 1: Manual Installation (Recommended)
 
 1. **Download the latest release**:
-   - Go to the [Releases](https://github.com/greywolf1499/opds_plus.koplugin/releases) page
-   - Download the `opds_plus.koplugin.zip` file from the latest release
+   - Go to the [Releases](https://github.com/abuettner93/opds_store.koplugin/releases) page
+   - Download the `opds_store.koplugin.zip` file from the latest release
 
 2. **Extract to KOReader plugins directory**:
 
@@ -91,14 +91,14 @@
   For complete platform-specific install/upgrade paths, see the KOReader wiki:
   [KOReader Installation/Upgrading](https://github.com/koreader/koreader/wiki#installationupgrading)
 
-   The archive should extract to create an `opds_plus.koplugin` directory containing all plugin files.
+   The archive should extract to create an `opds_store.koplugin` directory containing all plugin files.
 
 3. **Restart KOReader**: Close and reopen KOReader to load the plugin
 
 4. **Verify installation**:
    - Open KOReader's File Browser
    - Tap the menu icon (⋮ or ≡)
-   - You should see "OPDS Plus Catalog" in the menu
+   - You should see "OPDS Store Catalog" in the menu
 
 ### Method 2: Git Clone (For Developers)
 
@@ -107,24 +107,24 @@
 cd ~/.config/koreader/plugins/  # Adjust path for your system
 
 # Clone the repository
-git clone https://github.com/greywolf1499/opds_plus.koplugin.git
+git clone https://github.com/abuettner93/opds_store.koplugin.git
 
 # Restart KOReader
 ```
 
 ### Troubleshooting Installation
-- Ensure the directory is named exactly `opds_plus.koplugin`
+- Ensure the directory is named exactly `opds_store.koplugin`
 - Verify all `.lua` files are present in the plugin directory
 - Check that you have write permissions to the plugins directory
 - If the plugin doesn't appear, check KOReader's crash.log for errors
 
 ## 🚀 Usage
 
-### Accessing OPDS Plus
+### Accessing OPDS Store
 
 1. Open KOReader's **File Browser**
 2. Tap the **menu icon** (⋮ or ≡)
-3. Select **OPDS Plus Catalog**
+3. Select **OPDS Store Catalog**
 
 ### Browsing Catalogs
 
@@ -140,7 +140,7 @@ git clone https://github.com/greywolf1499/opds_plus.koplugin.git
 
 ### Customizing Settings
 
-Access settings from: **OPDS Plus Catalog → Settings**
+Access settings from: **OPDS Store Catalog → Settings**
 
 #### Display Mode
 - **List View**: Traditional list with covers on the left
@@ -197,8 +197,8 @@ Access settings from: **OPDS Plus Catalog → Settings**
   - Force sync all catalogs
 - **Gesture Integration**:
   - Actions are registered in KOReader's dispatcher as:
-    - `OPDS Plus: Sync all catalogs`
-    - `OPDS Plus: Force sync all catalogs`
+    - `OPDS Store: Sync all catalogs`
+    - `OPDS Store: Force sync all catalogs`
   - These can be assigned in KOReader's gesture/action configuration.
 - **Catalog Sync Controls**:
   - Per-catalog sync and force-sync via catalog long-press actions.
@@ -214,7 +214,7 @@ Access settings from: **OPDS Plus Catalog → Settings**
 
 ### Adding Your Own Catalogs
 
-1. Go to **OPDS Plus Catalog → Settings → Manage Catalogs**
+1. Go to **OPDS Store Catalog → Settings → Manage Catalogs**
 2. Select **Add Catalog**
 3. Enter:
    - Catalog name
@@ -229,10 +229,10 @@ Access settings from: **OPDS Plus Catalog → Settings**
 
 ### File Structure
 ```
-opds_plus.koplugin/
+opds_store.koplugin/
 ├── _meta.lua
 ├── main.lua
-├── opds_plus_version.lua
+├── opds_store_version.lua
 ├── config/
 │   ├── settings.lua
 │   └── settings_menu.lua
@@ -275,7 +275,7 @@ opds_plus.koplugin/
 ```
 
 ### Settings Storage
-Settings are stored in: `<KOReader data dir>/settings/opdsplus.lua`
+Settings are stored in: `<KOReader data dir>/settings/opds_store.lua`
 
 This file contains:
 - Catalog list
@@ -312,7 +312,8 @@ Contributions are welcome! Here's how you can help:
 ## 🙏 Credits
 
 - **Original OPDS Plugin**: KOReader development team
-- **Enhancement Development**: greywolf1499
+- **OPDS Plus Enhancement**: [greywolf1499](https://github.com/greywolf1499/opds_plus.koplugin)
+- **OPDS Store Fork**: [abuettner93](https://github.com/abuettner93)
 - Built upon the excellent [KOReader](https://github.com/koreader/koreader) e-reader software
 
 ## 📜 License
@@ -323,7 +324,7 @@ See the [LICENSE](LICENSE) file for details.
 
 ## 📞 Support
 
-- **Issues & Bug Reports**: [GitHub Issues](https://github.com/greywolf1499/opds_plus.koplugin/issues)
+- **Issues & Bug Reports**: [GitHub Issues](https://github.com/abuettner93/opds_store.koplugin/issues)
 - **KOReader Documentation**: [KOReader Wiki](https://github.com/koreader/koreader/wiki)
 - **OPDS Specification**: [OPDS Spec](https://specs.opds.io/)
 
@@ -333,4 +334,4 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
 ---
 
-**Enjoy enhanced OPDS browsing with OPDS Plus! 📚✨**
+**Enjoy enhanced OPDS browsing with OPDS Store! 📚✨**

@@ -82,6 +82,14 @@ local Constants = {
 		MAX_TTL_MINUTES = 10080, -- 7 days
 	},
 
+	-- Shelf Cache Configuration (home screen shelves)
+	SHELF_CACHE = {
+		DEFAULT_TTL_MINUTES = 60,
+		MAX_CANDIDATES = 6,       -- root nav entries considered per home build
+		SYNC_CANDIDATES = 3,      -- resolved before first paint, rest deferred
+		ITEMS_PER_SHELF = 6,      -- book covers kept per shelf
+	},
+
 	-- UI Icons
 	ICONS = {
 		MENU = "appbar.menu",

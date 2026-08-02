@@ -1,8 +1,8 @@
 local _ = require("gettext")
-local V = require("opds_plus_version")
+local V = require("opds_store_version")
 return {
-    name = "opdsplus",
-    fullname = _("OPDS Plus"),
+    name = "opds_store",
+    fullname = _("OPDS Store"),
     version = V.VERSION,
     description = _([[OPDS catalog browser with book cover display support. Browse and download books from online catalogs with visual cover previews in list or grid view.]]),
 }

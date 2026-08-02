@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a problem with OPDS Plus
+about: Report a problem with OPDS Store
 labels: bug
 ---
 
@@ -24,7 +24,7 @@ If possible, add screenshots or relevant lines from `crash.log`.
 - Device model (e.g. Kobo Clara HD, Kindle Paperwhite 3, Android phone, etc.):
 - Screen resolution (if known):
 - KOReader version (from About screen):
-- OPDS Plus version (from plugin metadata or release tag):
+- OPDS Store version (from plugin metadata or release tag):
 
 ### Additional context
 Add any other context about the problem here.

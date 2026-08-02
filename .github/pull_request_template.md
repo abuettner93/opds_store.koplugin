@@ -1,6 +1,6 @@
-# OPDS Plus Pull Request
+# OPDS Store Pull Request
 
-Thanks for contributing to OPDS Plus!
+Thanks for contributing to OPDS Store!
 
 ## Summary
 

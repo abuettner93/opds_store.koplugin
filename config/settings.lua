@@ -1,4 +1,4 @@
--- Settings management module for OPDS Plus
+-- Settings management module for OPDS Store
 -- Handles persistence, defaults, and settings access
 
 local LuaSettings = require("luasettings")
@@ -15,7 +15,7 @@ function Settings:new(settings_file)
 	setmetatable(o, self)
 	self.__index = self
 
-	o.settings_file = settings_file or DataStorage:getSettingsDir() .. "/opdsplus.lua"
+	o.settings_file = settings_file or DataStorage:getSettingsDir() .. "/opds_store.lua"
 	o.storage = LuaSettings:open(o.settings_file)
 	o.data = o.storage.data
 	o.is_first_run = next(o.data) == nil
@@ -121,6 +121,11 @@ function Settings:initializeDefaults()
 	-- Debug mode (default: false for production)
 	if self.data.debug_mode == nil then
 		self.data.debug_mode = false
+	end
+
+	-- Home screen (default: on, with an escape hatch back to the plain nav list)
+	if self.data.home_screen_enabled == nil then
+		self.data.home_screen_enabled = true
 	end
 end
 

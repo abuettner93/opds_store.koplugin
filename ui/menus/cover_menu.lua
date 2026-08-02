@@ -1,6 +1,7 @@
 local Menu = require("ui/widget/menu")
 local OPDSListMenu = require("ui.menus.list_menu")
 local OPDSGridMenu = require("ui.menus.grid_menu")
+local OPDSHomeMenu = require("ui.menus.home_menu")
 local UIManager = require("ui/uimanager")
 local Debug = require("utils.debug")
 local StateManager = require("core.state_manager")
@@ -30,6 +31,25 @@ function OPDSCoverMenu:updateItems(select_number)
     if self.halt_image_loading then
         self.halt_image_loading()
         self.halt_image_loading = nil
+    end
+
+    if self.is_home_screen then
+        self:_debugLog("Using OPDSHomeMenu (home screen)")
+
+        self.cover_width = nil
+        self.cover_height = nil
+        self.cell_width = nil
+        self.cell_height = nil
+        self.setCoverDimensions = nil
+        self.setGridDimensions = nil
+        self._recalculateDimen = nil
+
+        self._last_mode_had_covers = true
+        self._last_display_mode = "home"
+
+        self._loadVisibleCovers = OPDSHomeMenu._loadVisibleCovers
+
+        return OPDSHomeMenu.updateItems(self, select_number)
     end
 
     -- Check if any items have cover URLs
@@ -133,6 +153,10 @@ function OPDSCoverMenu:onCloseWidget()
     if self.halt_image_loading then
         self.halt_image_loading()
         self.halt_image_loading = nil
+    end
+
+    if self.is_home_screen then
+        return OPDSHomeMenu.onCloseWidget(self)
     end
 
     -- Check if we have cover-related items

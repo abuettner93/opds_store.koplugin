@@ -94,8 +94,9 @@ function OPDSMenuBuilder.buildFacetMenu(browser, catalog_url, has_covers)
 	local buttons = {}
 	local dialog
 
-	-- Add view toggle option FIRST if we have covers
-	if has_covers then
+	-- Add view toggle option FIRST if we have covers (not applicable to the home screen -
+	-- it's sectioned shelves, not a uniform list/grid)
+	if has_covers and not browser.is_home_screen then
 		local current_mode = StateManager.getInstance():getDisplayMode()
 		local toggle_text
 		if current_mode == "list" then
@@ -187,8 +188,9 @@ function OPDSMenuBuilder.buildCatalogMenu(browser, catalog_url, has_covers)
 	local buttons = {}
 	local dialog
 
-	-- Add view toggle if we have covers
-	if has_covers then
+	-- Add view toggle if we have covers (not applicable to the home screen - it's
+	-- sectioned shelves, not a uniform list/grid)
+	if has_covers and not browser.is_home_screen then
 		local current_mode = StateManager.getInstance():getDisplayMode()
 		local toggle_text
 		if current_mode == "list" then

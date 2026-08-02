@@ -2,6 +2,7 @@ local Blitbuffer = require("ffi/blitbuffer")
 local Font = require("ui/font")
 local FrameContainer = require("ui/widget/container/framecontainer")
 local Geom = require("ui/geometry")
+local ImageWidget = require("ui/widget/imagewidget")
 local RenderText = require("ui/rendertext")
 local Screen = require("device").screen
 local Size = require("ui/size")
@@ -91,6 +92,35 @@ function UIUtils.createPlaceholderCover(width, height, status)
 				text_widget,
 			},
 		},
+	}
+end
+
+-- Build a cover thumbnail widget (actual cover / loading / error / no-cover placeholder),
+-- centered in a fixed width x height box. Shared by grid cells and home screen shelf rows
+-- so both render covers identically.
+function UIUtils.buildCoverWidget(entry, width, height)
+	local inner_cover_widget
+	if entry.cover_bb then
+		inner_cover_widget = ImageWidget:new {
+			image = entry.cover_bb,
+			width = width,
+			height = height,
+			alpha = true,
+		}
+	elseif entry.cover_url and entry.lazy_load_cover then
+		inner_cover_widget = UIUtils.createPlaceholderCover(width, height, "loading")
+	elseif entry.cover_url and entry.cover_failed then
+		inner_cover_widget = UIUtils.createPlaceholderCover(width, height, "error")
+	else
+		inner_cover_widget = UIUtils.createPlaceholderCover(width, height, "no_cover")
+	end
+
+	return CenterContainer:new {
+		dimen = Geom:new {
+			w = width,
+			h = height,
+		},
+		inner_cover_widget,
 	}
 end
 

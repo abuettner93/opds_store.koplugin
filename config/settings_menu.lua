@@ -2,7 +2,7 @@ local InfoMessage = require("ui/widget/infomessage")
 local UIManager = require("ui/uimanager")
 local _ = require("gettext")
 local T = require("ffi/util").template
-local Version = require("opds_plus_version")
+local Version = require("opds_store_version")
 
 local SettingsMenu = {}
 
@@ -11,7 +11,7 @@ function SettingsMenu.create(plugin)
 		{
 			text = _("Browse Catalogs"),
 			callback = function()
-				plugin:onShowOPDSPlusCatalog()
+				plugin:onShowOPDSStoreCatalog()
 			end,
 		},
 		{
@@ -74,6 +74,33 @@ function SettingsMenu.create(plugin)
 									end,
 								},
 							},
+						},
+					},
+				},
+				{
+					text = _("Home Screen"),
+					sub_item_table = {
+						{
+							text = _("Enable Home Screen"),
+							checked_func = function()
+								return plugin:getSetting("home_screen_enabled") ~= false
+							end,
+							callback = function()
+								local current = plugin:getSetting("home_screen_enabled") ~= false
+								plugin:saveSetting("home_screen_enabled", not current)
+								UIManager:show(InfoMessage:new {
+									text = not current and
+										_("Home screen enabled.\n\nEntering a catalog will show curated shelves and search.") or
+										_("Home screen disabled.\n\nEntering a catalog will show the plain catalog list."),
+									timeout = 2,
+								})
+							end,
+						},
+						{
+							text = _("Clear Shelf Cache"),
+							callback = function()
+								plugin:clearShelfCache()
+							end,
 						},
 					},
 				},
@@ -286,10 +313,10 @@ function SettingsMenu.create(plugin)
 					},
 				},
 				{
-					text = T(_("About OPDS Plus v%1"), Version.VERSION),
+					text = T(_("About OPDS Store v%1"), Version.VERSION),
 					callback = function()
 						UIManager:show(InfoMessage:new {
-							text = T(_("OPDS Plus Plugin\nVersion: %1\n\nAn enhanced OPDS catalog browser with cover display support.\n\nFeatures:\n• List and Grid view modes\n• Customizable covers and fonts\n• Grid border options\n\nBased on KOReader's OPDS plugin"), Version.VERSION),
+							text = T(_("OPDS Store Plugin\nVersion: %1\n\nAn enhanced OPDS catalog browser with cover display support.\n\nFeatures:\n• List and Grid view modes\n• Customizable covers and fonts\n• Grid border options\n\nBased on KOReader's OPDS plugin"), Version.VERSION),
 							timeout = 5,
 						})
 					end,
