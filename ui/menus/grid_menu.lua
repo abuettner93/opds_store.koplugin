@@ -419,6 +419,22 @@ function OPDSGridMenu:_recalculateDimen()
     local available_width = self.inner_dimen.w - (GRID_CONFIG.side_margin * 2)
     local available_height = self.inner_dimen.h
 
+    -- setGridDimensions() ran earlier against self.inner_dimen.w as a guess (it can be
+    -- called before the Menu widget has settled its real geometry), so self.cell_width
+    -- may still reflect a too-wide budget. self.inner_dimen is guaranteed accurate here
+    -- (used for available_height above), so correct cell_width against it now -- this is
+    -- what actually drives row width in updateItems, and a stale wider cell_width is what
+    -- causes the grid to overflow its container (a horizontal scrollbar).
+    do
+        local total_gap_width = GRID_CONFIG.cell_margin * (self.columns - 1)
+        local available_for_cells = available_width - total_gap_width
+        local corrected_cell_width = math.floor(available_for_cells / self.columns)
+        if corrected_cell_width ~= self.cell_width then
+            self.cell_width = corrected_cell_width
+            self.cover_width = math.min(self.cover_width, self.cell_width - (GRID_CONFIG.cell_padding * 2))
+        end
+    end
+
     -- Subtract UI elements
     if not self.is_borderless then
         available_height = available_height - 2

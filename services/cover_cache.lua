@@ -1,6 +1,7 @@
 local DataStorage = require("datastorage")
 local lfs = require("libs/libkoreader-lfs")
 local bit = require("bit")
+local Debug = require("utils.debug")
 
 local CoverCache = {}
 
@@ -15,8 +16,9 @@ local function ensureDir(path)
 	for part in path:gmatch("[^/]+") do
 		current = current == "" and ("/" .. part) or (current .. "/" .. part)
 		if lfs.attributes(current, "mode") ~= "directory" then
-			local ok = lfs.mkdir(current)
+			local ok, err = lfs.mkdir(current)
 			if not ok then
+				Debug.error("CoverCache:", "mkdir failed for", current, ":", err or "unknown error")
 				return false
 			end
 		end
@@ -52,8 +54,9 @@ local function readFile(path)
 end
 
 local function writeFile(path, content)
-	local f = io.open(path, "wb")
+	local f, err = io.open(path, "wb")
 	if not f then
+		Debug.error("CoverCache:", "failed to open for write:", path, ":", err or "unknown error")
 		return false
 	end
 	f:write(content)
