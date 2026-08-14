@@ -374,9 +374,16 @@ function OPDSListMenu:_recalculateDimen()
     -- Calculate ACTUAL available height for menu items
     local available_height = self.inner_dimen.h
 
-    -- Subtract height of other UI elements
+    -- Calculate ACTUAL available width for menu items. `self.content_width` was
+    -- read at line ~478 but never assigned here before, so it always fell back
+    -- to the raw screen width -- wider than the real inner content box -- and
+    -- rows overflowed their container (visible as a horizontal scrollbar).
+    self.content_width = self.inner_dimen.w
+
+    -- Subtract height/width of other UI elements
     if not self.is_borderless then
         available_height = available_height - 2 -- borders
+        self.content_width = self.content_width - 2
     end
     if not self.no_title and self.title_bar then
         available_height = available_height - self.title_bar.dimen.h

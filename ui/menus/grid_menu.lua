@@ -340,7 +340,12 @@ function OPDSGridMenu:setGridDimensions()
     local screen_height = Screen:getHeight()
 
     -- Calculate available dimensions
-    local available_width = screen_width - (GRID_CONFIG.side_margin * 2)
+    -- Prefer the menu's actual inner content width over raw screen width --
+    -- the Menu widget's own chrome (borders/padding) makes them differ, and
+    -- using the raw screen width here caused the grid to render wider than
+    -- its container (visible as a horizontal scrollbar).
+    local content_width = (self.inner_dimen and self.inner_dimen.w) or screen_width
+    local available_width = content_width - (GRID_CONFIG.side_margin * 2)
 
     -- Estimate available height (will be refined in _recalculateDimen)
     local estimated_ui_overhead = 100
