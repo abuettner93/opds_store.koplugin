@@ -250,7 +250,14 @@ function OPDSHomeMenu.updateItems(self, select_number)
 		self.return_button:resetLayout()
 	end
 
-	local available_width = self.inner_dimen.w - (HOME_CONFIG.side_margin * 2)
+	-- Reserve a little extra beyond the two side margins for ScrollableContainer's own
+	-- vertical scrollbar gutter. The storefront is the one view that actually scrolls
+	-- (grid/list paginate instead), and content here was previously sized to fill
+	-- inner_dimen.w exactly minus only the visual side margins -- if the scrollable
+	-- viewport reserves gutter space for its scroll handle inside that same box, content
+	-- sized to the full width pushes a few px past the visible edge.
+	local scrollbar_gutter = Size.padding.default or 10
+	local available_width = self.inner_dimen.w - (HOME_CONFIG.side_margin * 2) - scrollbar_gutter
 	local available_height = self.inner_dimen.h
 	if not self.is_borderless then
 		available_height = available_height - 2

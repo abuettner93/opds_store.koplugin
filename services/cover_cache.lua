@@ -12,9 +12,18 @@ local function ensureDir(path)
 		return true
 	end
 
-	local current = ""
+	-- DataStorage:getDataDir() is not guaranteed to return an absolute path -- on some
+	-- platforms (observed on a Kindle sideload) it returns "." (relative to koreader's
+	-- cwd). Forcing a leading "/" onto the first segment unconditionally turned that into
+	-- "/./cache/...", a bogus path anchored at the real filesystem root, which is
+	-- read-only on Kindle firmware. Preserve relative vs. absolute based on the input.
+	local current
 	for part in path:gmatch("[^/]+") do
-		current = current == "" and ("/" .. part) or (current .. "/" .. part)
+		if not current then
+			current = (path:sub(1, 1) == "/") and ("/" .. part) or part
+		else
+			current = current .. "/" .. part
+		end
 		if lfs.attributes(current, "mode") ~= "directory" then
 			local ok, err = lfs.mkdir(current)
 			if not ok then

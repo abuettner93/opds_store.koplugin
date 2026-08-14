@@ -140,16 +140,23 @@ function HomeBuilder.resolveRemaining(browser)
 		else
 			table.insert(browser.home_data.browse_links, { text = entry.label, url = entry.source_url })
 		end
-
-		if browser.is_home_screen and browser.updateItems then
-			browser:updateItems()
-		end
 	end
 
 	if #pending > 0 then
 		UIManager:scheduleIn(0.5, function()
 			HomeBuilder.resolveRemaining(browser)
 		end)
+	elseif browser.home_data and browser.is_home_screen and browser.updateItems then
+		-- Render once, now that the full shelf set is known, instead of after every single
+		-- candidate. OPDSHomeMenu.updateItems() unconditionally halts and restarts cover
+		-- loading on each call (it has to -- it rebuilds every thumbnail widget from
+		-- scratch), so re-rendering per-candidate was cancelling in-flight cover fetches
+		-- for earlier shelves roughly every 0.5s. Only whichever shelf's covers happened to
+		-- be first in the queue when the *last* restart landed ever got far enough to
+		-- finish -- which is exactly the "only the first shelf's covers ever show up"
+		-- symptom. Rendering once, after the queue drains, gives the resulting batch an
+		-- uninterrupted run at the full item list.
+		browser:updateItems()
 	end
 end
 
