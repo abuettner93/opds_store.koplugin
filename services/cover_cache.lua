@@ -5,7 +5,34 @@ local Debug = require("utils.debug")
 
 local CoverCache = {}
 
-local CACHE_DIR = DataStorage:getDataDir() .. "/cache/opds_store/covers"
+-- DataStorage:getDataDir() can return a path relative to koreader's own working
+-- directory (observed on a Kindle sideload: it returns "."). Resolving that against
+-- lfs.currentdir() *once*, here at module load, pins the cache to one fixed absolute
+-- location for the lifetime of this process. Without this, if koreader's cwd at launch
+-- ever differs between runs (launcher-dependent -- KUAL entries, direct exec, etc. don't
+-- all guarantee the same cwd), "./cache/..." silently resolves to a *different* real
+-- directory each time: files written in a previous session would exist on disk, visibly,
+-- while the current session's relative lookups miss them entirely because they resolve
+-- against a different base.
+local function resolveDataDir()
+	local data_dir = DataStorage:getDataDir()
+	if data_dir:sub(1, 1) == "/" then
+		return data_dir
+	end
+
+	local cwd = lfs.currentdir()
+	if not cwd then
+		return data_dir
+	end
+
+	if data_dir == "." then
+		return cwd
+	end
+	return cwd .. "/" .. data_dir
+end
+
+local CACHE_DIR = resolveDataDir() .. "/cache/opds_store/covers"
+Debug.error("CoverCache:", "cache dir resolved to", CACHE_DIR)
 
 local function ensureDir(path)
 	if lfs.attributes(path, "mode") == "directory" then
@@ -128,11 +155,13 @@ function CoverCache.get(url, ttl_seconds)
 	local path = cachePath(url)
 	local attr = lfs.attributes(path)
 	if not attr or attr.mode ~= "file" then
+		Debug.error("CoverCache:", "no file at", path, "for", url)
 		return nil
 	end
 
 	local content = readFile(path)
 	if not content or content == "" then
+		Debug.error("CoverCache:", "file at", path, "unreadable or empty")
 		return nil
 	end
 
