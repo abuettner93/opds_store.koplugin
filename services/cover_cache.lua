@@ -32,7 +32,7 @@ local function resolveDataDir()
 end
 
 local CACHE_DIR = resolveDataDir() .. "/cache/opds_store/covers"
-Debug.error("CoverCache:", "cache dir resolved to", CACHE_DIR)
+Debug.log("CoverCache:", "cache dir resolved to", CACHE_DIR)
 
 local function ensureDir(path)
 	if lfs.attributes(path, "mode") == "directory" then
@@ -63,13 +63,22 @@ local function ensureDir(path)
 end
 
 local function hashUrl(url)
+	-- Two independent djb2-style accumulators, both kept within a safe 32-bit range on
+	-- every iteration via bit.tobit. h2 previously seeded from FNV's offset basis
+	-- (2166136261) and multiplied by the FNV prime (16777619) -- once the accumulator
+	-- reached full 32-bit magnitude, that product could hit ~3.6e16, past a double's exact
+	-- 2^53 integer ceiling. The resulting precision loss wasn't stable across LuaJIT's
+	-- interpreted vs. JIT-compiled paths, so the same URL could hash differently between
+	-- calls (observed live: same URL, same device, three different hashes across two
+	-- launches). A small multiplier keeps every intermediate product exactly representable,
+	-- which is why h1 (multiplier 33) was always stable while h2 wasn't.
 	local h1 = 5381
-	local h2 = 2166136261
+	local h2 = 52711
 
 	for i = 1, #url do
 		local b = string.byte(url, i)
 		h1 = bit.tobit(bit.bxor((h1 * 33), b))
-		h2 = bit.tobit((h2 * 16777619) + b)
+		h2 = bit.tobit(bit.bxor((h2 * 33) + i, b))
 	end
 
 	return bit.tohex(h1) .. bit.tohex(h2)
@@ -155,13 +164,13 @@ function CoverCache.get(url, ttl_seconds)
 	local path = cachePath(url)
 	local attr = lfs.attributes(path)
 	if not attr or attr.mode ~= "file" then
-		Debug.error("CoverCache:", "no file at", path, "for", url)
+		Debug.log("CoverCache:", "no file at", path, "for", url)
 		return nil
 	end
 
 	local content = readFile(path)
 	if not content or content == "" then
-		Debug.error("CoverCache:", "file at", path, "unreadable or empty")
+		Debug.log("CoverCache:", "file at", path, "unreadable or empty")
 		return nil
 	end
 

@@ -21,13 +21,19 @@ local function getStorage()
 end
 
 local function hashUrl(url)
+	-- See services/cover_cache.lua's hashUrl for why h2 uses a small multiplier kept in
+	-- 32-bit range every step, instead of FNV-1a's real prime/offset-basis constants: the
+	-- FNV multiply overflows a double's exact 2^53 integer range once the accumulator
+	-- reaches full 32-bit magnitude, and the resulting precision loss isn't stable across
+	-- LuaJIT's interpreted vs. JIT-compiled paths -- confirmed live on a Kindle, where the
+	-- same URL hashed differently across calls.
 	local h1 = 5381
-	local h2 = 2166136261
+	local h2 = 52711
 
 	for i = 1, #url do
 		local b = string.byte(url, i)
 		h1 = bit.tobit(bit.bxor((h1 * 33), b))
-		h2 = bit.tobit((h2 * 16777619) + b)
+		h2 = bit.tobit(bit.bxor((h2 * 33) + i, b))
 	end
 
 	return bit.tohex(h1) .. bit.tohex(h2)

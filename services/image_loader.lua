@@ -47,7 +47,7 @@ function Batch:loadImages(urls)
         if self.cover_cache_enabled ~= false then
             local cached = CoverCache.get(url, ttl_seconds)
             if cached and not cached.stale then
-                Debug.error("ImageLoader:", "Cover cache HIT:", url)
+                Debug.log("ImageLoader:", "Cover cache hit:", url)
                 if self.callback then
                     -- A single bad callback (e.g. a widget already torn down by a
                     -- page change) must not abort the whole batch chain below.
@@ -65,7 +65,7 @@ function Batch:loadImages(urls)
                 return
             end
 
-            Debug.error("ImageLoader:", "Cover cache MISS:", url, cached and ("(stale, age=" .. tostring(cached.age_seconds) .. "s)") or "(no file)")
+            Debug.log("ImageLoader:", "Cover cache miss:", url, cached and ("(stale, age=" .. tostring(cached.age_seconds) .. "s)") or "(no file)")
             if cached and cached.content then
                 stale_content = cached.content
             end
